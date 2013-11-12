@@ -114,7 +114,7 @@ function eventConsole:new()
                      numLogEntries   = 0                 ,
                      scrollView      = nil               ,
                      activator       = display.newGroup(),
-                     consoleFontSize = 12                ,
+                     consoleFontSize = 12 * ((display.contentHeight/30)/16)                ,
                      visible         = false             ,
                      disabled        = false             ,
                      toFrontThread   = nil
@@ -138,12 +138,12 @@ function eventConsole:new()
         self.scrollView.isVisible = false
 
         --the next elements are used as touchable display group for switching the visibility state of the scroll view
-        local circle = display.newCircle(display.contentWidth/2, 1, 60) -- needed for better handling. By the help of this circle we don't need to exactly
+        local circle = display.newCircle(display.contentWidth/2, 1, display.contentWidth*.2) -- needed for better handling. By the help of this circle we don't need to exactly
         circle.x = display.contentWidth/2
         circle.y = 20
         circle.fill = {1,1,1,.25}                                                -- hit the smaller visible circle which is created next to trigger the touch event
 
-        local circle2 = display.newCircle(display.contentWidth/2, 1, 15)
+        local circle2 = display.newCircle(display.contentWidth/2, 1, display.contentWidth*.05)
         circle2.x = display.contentWidth/2
         circle2.y = 20
         circle2:setFillColor(1,1,1)
@@ -151,7 +151,7 @@ function eventConsole:new()
         circle2.strokeWidth=5
         circle2.fill={1,1,1,1}
 
-        local caption = display.newText("C", 0, 0, native.systemFont, 16)
+        local caption = display.newText("C", 0, 0, native.systemFont,16 * ((display.contentHeight/30)/16) )--42*(display.contentHeight*.05))
         caption:setFillColor(0,0,.95)
         
         caption.x = display.contentWidth/2 --circle2.x --display.contentWidth/2 + 1
@@ -225,14 +225,17 @@ function eventConsole:new()
 
             display.setDefault( "anchorX", 0.5 )
             display.setDefault( "anchorY", 0.5 )
+    
+        print (text.x .. " : " .. text.y)
 
         text.x = display.contentCenterX * -1
+        
         
         text:setFillColor(colorTable[1], colorTable[2], colorTable[3])
 
         self.scrollView:insert(text)
         
-        --text.x = display.contentCenterX * -1
+        text.y = text.y - display.contentCenterY
         
         self.numLogEntries = self.numLogEntries + 1
     end
