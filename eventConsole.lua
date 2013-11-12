@@ -1,6 +1,20 @@
 module(..., package.seeall)
 
 --[[
+ VERSION 1.2
+ 
+ This version has been updated to work with Graphics 2.0
+ 
+ Chris Norman - chris@inzi.com
+ Nov. 12, 2013
+ http://www.inzi.com
+
+
+
+--]]
+
+
+--[[
 
  Simple helper class that makes it possible to show text based output (like with the "print()" command) directly
  in your App and not in the console window. This is useful for using it on the device where no extra console
@@ -100,7 +114,7 @@ function eventConsole:new()
                      numLogEntries   = 0                 ,
                      scrollView      = nil               ,
                      activator       = display.newGroup(),
-                     consoleFontSize = 24                ,
+                     consoleFontSize = 12                ,
                      visible         = false             ,
                      disabled        = false             ,
                      toFrontThread   = nil
@@ -112,24 +126,36 @@ function eventConsole:new()
     function object:init()
 
         --create a scroll view that acts as container for all the log entries
-        self.scrollView           = CoronaWidget.newScrollView( {bgColor = {0,0,0,210}, scrollWidth = display.contentWidth, scrollHeight = display.contentHeight} )
+        --self.scrollView           = CoronaWidget.newScrollView( {bgColor = {0,0,0,210}, scrollWidth = display.contentWidth, scrollHeight = display.contentHeight} )
+        self.scrollView           = CoronaWidget.newScrollView{ 
+            top = 0, 
+            left = 0,
+            width = display.contentWidth,
+            height = display.contentHeight
+        }
+
+
         self.scrollView.isVisible = false
 
         --the next elements are used as touchable display group for switching the visibility state of the scroll view
-        local circle = display.newCircle(display.contentWidth/2, 20, 60) -- needed for better handling. By the help of this circle we don't need to exactly
-        circle.alpha=0.05                                                -- hit the smaller visible circle which is created next to trigger the touch event
+        local circle = display.newCircle(display.contentWidth/2, 1, 60) -- needed for better handling. By the help of this circle we don't need to exactly
+        circle.x = display.contentWidth/2
+        circle.y = 20
+        circle.fill = {1,1,1,.25}                                                -- hit the smaller visible circle which is created next to trigger the touch event
 
-        local circle2 = display.newCircle(display.contentWidth/2, 20, 15)
-        circle2:setFillColor(255,255,255)
+        local circle2 = display.newCircle(display.contentWidth/2, 1, 15)
+        circle2.x = display.contentWidth/2
+        circle2.y = 20
+        circle2:setFillColor(1,1,1)
+        circle2:setStrokeColor(.8,.2,.2)
         circle2.strokeWidth=5
-        circle2:setStrokeColor(200,50,50)
-        circle2.alpha=1
+        circle2.fill={1,1,1,1}
 
         local caption = display.newText("C", 0, 0, native.systemFont, 16)
-        caption:setTextColor(0,0,250)
-        caption:setReferencePoint(display.CenterReferencePoint)
-        caption.x = display.contentWidth/2 + 1
-        caption.y = 21
+        caption:setFillColor(0,0,.95)
+        
+        caption.x = display.contentWidth/2 --circle2.x --display.contentWidth/2 + 1
+        caption.y = 20 --circle2.y
 
         self.activator:insert(circle)
         self.activator:insert(circle2)
@@ -150,7 +176,7 @@ function eventConsole:new()
      This adds a new text without a color code
     ]]--
     function object:print(text)
-        self:write(text, {255,255,255}, "")
+        self:write(text, {0,0,0}, "")
     end
 
 
@@ -158,7 +184,7 @@ function eventConsole:new()
      This adds a new text marked as error
     ]]--
     function object:error(text)
-        self:write(text, {255,0,0}, "E")
+        self:write(text, {1,0,0}, "E")
     end
 
 
@@ -166,7 +192,7 @@ function eventConsole:new()
      This adds a new text marked as warning
     ]]--
     function object:warning(text)
-        self:write(text, {255,235,55}, "W")
+        self:write(text, {1,.9,.2}, "W")
     end
 
 
@@ -174,7 +200,7 @@ function eventConsole:new()
      This adds a new text marked as info message
     ]]--
     function object:info(text)
-        self:write(text, {0,255,0}, "I")
+        self:write(text, {0,1,0}, "I")
     end
 
 
@@ -182,7 +208,7 @@ function eventConsole:new()
      This adds a new text marked as debug message
     ]]--
     function object:debug(text)
-        self:write(text, {147,180,255}, "D")
+        self:write(text, {.6,.7,1}, "D")
     end
 
 
@@ -192,10 +218,22 @@ function eventConsole:new()
     function object:write(text, colorTable, typeMarker)
         if(self.disabled == true) then return end
 
+            display.setDefault( "anchorX", 0 )
+            display.setDefault( "anchorY", 0 )
+
         local text = display.newText(os.date("%Y/%m/%d  %H:%M:%S") .. " >" .. typeMarker .. "> " .. text, 0, self.numLogEntries * self.consoleFontSize, native.systemFont, self.consoleFontSize)
-        text:setTextColor(colorTable[1], colorTable[2], colorTable[3])
+
+            display.setDefault( "anchorX", 0.5 )
+            display.setDefault( "anchorY", 0.5 )
+
+        text.x = display.contentCenterX * -1
+        
+        text:setFillColor(colorTable[1], colorTable[2], colorTable[3])
 
         self.scrollView:insert(text)
+        
+        --text.x = display.contentCenterX * -1
+        
         self.numLogEntries = self.numLogEntries + 1
     end
 
