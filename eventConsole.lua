@@ -226,10 +226,8 @@ function eventConsole:new()
             display.setDefault( "anchorX", 0.5 )
             display.setDefault( "anchorY", 0.5 )
     
-        print (text.x .. " : " .. text.y)
 
         text.x = display.contentCenterX * -1
-        
         
         text:setFillColor(colorTable[1], colorTable[2], colorTable[3])
 
