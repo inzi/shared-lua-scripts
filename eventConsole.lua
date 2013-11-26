@@ -45,7 +45,7 @@ module(..., package.seeall)
                         typeMarker = "GR",
                         bShowTimestamp = false})
  
- Chris Norman - chris@inzi.com
+ Chris Norman 
  Nov. 26, 2013
  http://www.inzi.com
 
