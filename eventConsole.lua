@@ -53,6 +53,18 @@ module(..., package.seeall)
 
 --]]
 --[[
+ VERSION 1.2
+ 
+ This version has been updated to work with Graphics 2.0
+ 
+ Chris Norman - chris@inzi.com
+ Nov. 12, 2013
+ http://www.inzi.com
+
+
+
+--]]
+--[[
 
  Simple helper class that makes it possible to show text based output (like with the "print()" command) directly
  in your App and not in the console window. This is useful for using it on the device where no extra console
