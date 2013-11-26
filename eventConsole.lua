@@ -57,7 +57,7 @@ module(..., package.seeall)
  
  This version has been updated to work with Graphics 2.0
  
- Chris Norman - chris@inzi.com
+ Chris Norman
  Nov. 12, 2013
  http://www.inzi.com
 
